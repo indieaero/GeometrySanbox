@@ -47,6 +47,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh;
 
+	void SetGeomatryData(const FGeometryData& Data) { GeometryData = Data; }
 
 protected:
 	// Called when the game starts or when spawned
