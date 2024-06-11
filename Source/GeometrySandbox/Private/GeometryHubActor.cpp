@@ -4,6 +4,8 @@
 #include "GeometryHubActor.h"
 #include "Engine/World.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogGeometryHub, All, All);
+
 // Sets default values
 AGeometryHubActor::AGeometryHubActor()
 {
@@ -17,8 +19,8 @@ void AGeometryHubActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DoActorSpawn1();
-	DoActorSpawn2();
+	//DoActorSpawn1();
+	//DoActorSpawn2();
 	DoActorSpawn3();
 }
 
@@ -44,10 +46,10 @@ void AGeometryHubActor::DoActorSpawn1()
 			{
 				FGeometryData Data;
 				Data.MoveType = FMath::RandBool() ? EMovementType::Static : EMovementType::Sin;
-				Geometry->SetGeomatryData(Data);
+				Geometry->SetGeometryData(Data);
 			}
 		}
-	};
+	}
 }
 
 void AGeometryHubActor::DoActorSpawn2()
@@ -64,11 +66,11 @@ void AGeometryHubActor::DoActorSpawn2()
 			{
 				FGeometryData Data;
 				Data.Color = FLinearColor::MakeRandomColor();
-				Geometry->SetGeomatryData(Data);
+				Geometry->SetGeometryData(Data);
 				Geometry->FinishSpawning(GeometryTransform);
 			}
 		}
-	};
+	}
 }
 
 void AGeometryHubActor::DoActorSpawn3()
@@ -82,11 +84,32 @@ void AGeometryHubActor::DoActorSpawn3()
 
 			if (Geometry)
 			{
-				Geometry->SetGeomatryData(Payload.Data);
-				Geometry->FinishSpawning(Payload.InitialTransform);
-
+				Geometry->SetGeometryData(Payload.Data);
+				Geometry->OnColorChanged.AddDynamic(this, &AGeometryHubActor::OnColorChanged);
+				Geometry->OnTimerFinished.AddUObject(this, &AGeometryHubActor::OnTimerFinished);
+;				Geometry->FinishSpawning(Payload.InitialTransform);
 			}
 		}
 	}
+}
+
+void AGeometryHubActor::OnColorChanged(const FLinearColor& Color, const FString& Name)
+{
+	UE_LOG(LogGeometryHub, Warning, TEXT("Actor name: %s Color: %s"), *Name, *Color.ToString());
+}
+
+void AGeometryHubActor::OnTimerFinished(AActor* Actor)
+{
+	if(!Actor) return;
+	UE_LOG(LogGeometryHub, Error, TEXT("Timer finished: %s"), *Actor->GetName());
+
+	ABaseGeometryActor* Geometry = Cast<ABaseGeometryActor>(Actor);
+	if (!Geometry) return;
+
+	UE_LOG(LogGeometryHub, Display, TEXT("Cast is success, amplitude %f"), Geometry->GetGeometryData().Amplitude);
+
+	Geometry->Destroy();
+	//Geometry->SetLifeSpan(2.0f);
+
 }
 

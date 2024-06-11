@@ -41,8 +41,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<FGeometryPayload> GeometryPayloads;
 
-
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -51,4 +49,7 @@ public:
 	void DoActorSpawn2();
 	void DoActorSpawn3();
 
+	UFUNCTION()
+	void OnColorChanged(const FLinearColor& Color, const FString& Name);
+	void OnTimerFinished(AActor* Actor);
 };

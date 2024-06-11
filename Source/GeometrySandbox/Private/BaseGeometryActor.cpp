@@ -38,6 +38,12 @@ void ABaseGeometryActor::BeginPlay()
 							        true);
 }
 
+void ABaseGeometryActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    UE_LOG(LogBaseGeometry, Error, TEXT("Actor is dead %s"), *GetName());
+	Super::EndPlay(EndPlayReason);
+}
+
 // Called every frame
 void ABaseGeometryActor::Tick(float DeltaTime)
 {
@@ -98,7 +104,7 @@ void ABaseGeometryActor::HandleMovement()
     {
         //z = z0 + amplitude * sin(freq * t);
         FVector CurrentLocation = GetActorLocation();
-        if(GetWorld()
+        if(GetWorld())
         {
             float Time = GetWorld()->GetTimeSeconds();
             CurrentLocation.Z = InitialLocation.Z + GeometryData.Amplitude * FMath::Sin(GeometryData.Frequency * Time);
@@ -106,7 +112,7 @@ void ABaseGeometryActor::HandleMovement()
             SetActorLocation(CurrentLocation);
         }
     }
-    break;
+    	break;
 
     case EMovementType::Static: break;
     default:break;
@@ -116,9 +122,8 @@ void ABaseGeometryActor::HandleMovement()
 void ABaseGeometryActor::SetColor(const FLinearColor& Color)
 {
     if (!BaseMesh) return;
-
-    UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
-    if (DynMaterial)
+	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
+	if (DynMaterial)
     {
         DynMaterial->SetVectorParameterValue("Color", Color);
     }
@@ -130,11 +135,13 @@ void ABaseGeometryActor::OnTimerFired()
     {
         const FLinearColor NewColor = FLinearColor::MakeRandomColor();
         UE_LOG(LogBaseGeometry, Display, TEXT("TimerCount: %i, Color to set up: %s"), TimerCount, *NewColor.ToString())
-            SetColor(NewColor);
+    	SetColor(NewColor);
+        OnColorChanged.Broadcast(NewColor, GetName());
     }
     else
     {
         UE_LOG(LogBaseGeometry, Display, TEXT("Timer has been stopped."));
         GetWorldTimerManager().ClearTimer(TimerHandle);
+        OnTimerFinished.Broadcast(this);
     }
 }
