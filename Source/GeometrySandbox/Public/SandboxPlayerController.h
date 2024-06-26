@@ -22,5 +22,7 @@ private:
 	UPROPERTY()
 	TArray<AActor*> Pawns;
 
+	int32 CurrentPawnIndex = 0;
+
 	void ChangePawn();
 };

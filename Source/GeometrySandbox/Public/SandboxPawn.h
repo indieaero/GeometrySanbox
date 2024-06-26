@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Velocity = 300.0f;
 
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
