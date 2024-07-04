@@ -2,9 +2,7 @@
 
 
 #include "BaseGeometryActor.h"
-#include "Engine/Engine.h"
-#include  "Materials/MaterialInstanceDynamic.h"
-#include "TimerManager.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseGeometry, All, All);
 

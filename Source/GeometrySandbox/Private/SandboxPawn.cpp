@@ -2,8 +2,6 @@
 
 
 #include "SandboxPawn.h"
-#include "Components/InputComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Camera/CameraComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSandboxPawn, All, All);

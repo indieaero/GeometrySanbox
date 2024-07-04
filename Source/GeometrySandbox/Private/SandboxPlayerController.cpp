@@ -1,11 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SandboxPlayerController.h"
 #include "SandboxPawn.h"
-#include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "SandboxPawn.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSandboxPlayerController, All, All);
 
